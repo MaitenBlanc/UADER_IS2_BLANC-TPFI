@@ -57,7 +57,6 @@ class DatabaseSingleton:
 
 
 # PATRÓN OBSERVER 
-
 class ObserverManager:
     """
     Gestiona las subscripciones y notifica a los clientes de cambios.
@@ -113,6 +112,7 @@ class CorporateDataProxy:
 
         # Registro de Auditoría
         log_entry = {
+            "id": str(uuid.uuid4()),
             "UUID": cliente_uuid,
             "sesion": sesion_id,
             "accion": accion,
