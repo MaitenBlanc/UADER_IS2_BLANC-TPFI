@@ -1,20 +1,19 @@
 """Tests unitarios (Mock) para verificar los patrones y lógica interna del servidor."""
 
-from unittest.mock import MagicMock, mock_open, patch
-
 import pytest
+from unittest.mock import MagicMock, patch, mock_open
+import socket
+import json
 
-from tpfi_is2_aws.observerclient import conectar_y_escuchar
-from tpfi_is2_aws.observerclient import main as observer_main
-from tpfi_is2_aws.singletonclient import main as client_main
-from tpfi_is2_aws.singletonclient import main as main_singleton_client
 from tpfi_is2_aws.singletonproxyobserver import (
-    CorporateDataProxy,
     DatabaseSingleton,
     ObserverManager,
+    CorporateDataProxy,
     client_handler,
+    main as main_server
 )
-from tpfi_is2_aws.singletonproxyobserver import main as main_server
+from tpfi_is2_aws.singletonclient import main as client_main
+from tpfi_is2_aws.observerclient import conectar_y_escuchar, main as observer_main
 
 
 @pytest.fixture
