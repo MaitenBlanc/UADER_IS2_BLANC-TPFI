@@ -1,19 +1,19 @@
 """Tests unitarios (Mock) para verificar los patrones y lógica interna del servidor."""
 
-import pytest
-from unittest.mock import MagicMock, patch, mock_open
-import socket
-import json
+from unittest.mock import MagicMock, mock_open, patch
 
+import pytest
+
+from tpfi_is2_aws.observerclient import conectar_y_escuchar
+from tpfi_is2_aws.observerclient import main as observer_main
+from tpfi_is2_aws.singletonclient import main as client_main
 from tpfi_is2_aws.singletonproxyobserver import (
+    CorporateDataProxy,
     DatabaseSingleton,
     ObserverManager,
-    CorporateDataProxy,
     client_handler,
-    main as main_server
 )
-from tpfi_is2_aws.singletonclient import main as client_main
-from tpfi_is2_aws.observerclient import conectar_y_escuchar, main as observer_main
+from tpfi_is2_aws.singletonproxyobserver import main as main_server
 
 
 @pytest.fixture
@@ -163,7 +163,7 @@ def test_singletonclient_exito():
         mock_conn.recv.return_value = mock_response.encode("utf-8")
         mock_socket.return_value = mock_conn
 
-        main_singleton_client()
+        client_main()
 
         # Verificar que el cliente intentó conectarse y envió los datos
         mock_conn.connect.assert_called_once_with(("localhost", 8080))

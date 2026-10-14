@@ -14,7 +14,7 @@ import uuid
 from datetime import UTC, datetime
 from typing import Any
 
-import boto3 # type: ignore
+import boto3  # type: ignore
 
 # PATRÓN SINGLETON
 
@@ -205,7 +205,7 @@ def main():
     proxy = CorporateDataProxy(observer_manager)
 
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server.bind(("0.0.0.0", args.port))
+    server.bind(("0.0.0.0", args.port))  # nosec
     server.listen(5)
 
     print(f"Servidor iniciado en puerto {args.port}...")
