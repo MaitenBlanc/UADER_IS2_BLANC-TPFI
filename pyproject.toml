@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "TPFI-IS2-AWS"
-version = "0.1.0"
-description = "Trabajo Pr\u00e1ctico Final Integrador IS2 con Patrones y DynamoDB."
+version = "1.0.0"
+description = "Trabajo Práctico Final Integrador IS2 con Patrones y DynamoDB."
 readme = "README.md"
 authors = [
   {name = "Maiten Blanc", email = "maitengblanc@gmail.com"}
@@ -20,45 +20,14 @@ classifiers = [
 ]
 license = {text = "MIT"}
 dependencies = [
-  "typer",
-  "rich",
+  "boto3",
 ]
 requires-python = ">= 3.12"
 
-[dependency-groups]
-dev = [
-    { include-group = "lint" },
-    { include-group = "test" },
-    { include-group = "typecheck" },
-]
-lint = [
-    "ruff",
-]
-test = [
-    "coverage",
-    "pytest",
-]
-typecheck = [
-    "ty",
-]
-docs = [
-    "zensical",
-    "mkdocstrings-python",
-]
-
 [project.urls]
-bugs = "https://github.com/MaitenBlanc/TPFI-IS2-AWS/issues"
-changelog = "https://github.com/MaitenBlanc/TPFI-IS2-AWS/releases"
-documentation = "https://MaitenBlanc.github.io/TPFI-IS2-AWS/"
-homepage = "https://github.com/MaitenBlanc/TPFI-IS2-AWS"
-
-[project.scripts]
-tpfi_is2_aws = "tpfi_is2_aws.cli:app"
-
-[tool.ty]
-# All rules are enabled as "error" by default; no need to specify unless overriding.
-# Example override: relax a rule for the entire project (uncomment if needed).
-# rules.TY015 = "warn"  # For invalid-argument-type, warn instead of error.
+bugs = "https://github.com/MaitenBlanc/UADER_IS2_BLANC-TPFI/issues"
+changelog = "https://github.com/MaitenBlanc/UADER_IS2_BLANC-TPFI/blob/main/CHANGELOG.md"
+homepage = "https://github.com/MaitenBlanc/UADER_IS2_BLANC-TPFI"
 
 [tool.ruff]
 line-length = 120
@@ -73,21 +42,13 @@ select = [
     "UP",  # pyupgrade
 ]
 
-[tool.ruff.lint.flake8-bugbear]
-extend-immutable-calls = [
-    "typer.Argument",
-    "typer.Option",
-]
-
 [tool.coverage.run]
 branch = true
-parallel = true
-source = ["src/", "tests/"]
+source = ["src/tpfi_is2_aws"]
 
 [tool.coverage.report]
 show_missing = true
-skip_covered = true
-fail_under = 50
+fail_under = 85
 exclude_also = [
     "if TYPE_CHECKING:",
     "if typing.TYPE_CHECKING:",
@@ -104,7 +65,3 @@ testpaths = ["tests"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/tpfi_is2_aws"]
-
-[tool.uv]
-package = true
-default-groups = ["dev"]

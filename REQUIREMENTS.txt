@@ -1,2 +1,9 @@
 boto3==1.43.108
+ruff
+black
+mypy
+pyright
 pytest
+pytest-cov
+bandit
+pdoc

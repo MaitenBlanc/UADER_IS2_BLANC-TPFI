@@ -1,1 +1,4 @@
-"""Top-level package for TPFI IS2 AWS."""
+"""Paquete principal TPFI IS2 AWS."""
+
+VERSION = "1.0.0"
+BUILD = "001"
