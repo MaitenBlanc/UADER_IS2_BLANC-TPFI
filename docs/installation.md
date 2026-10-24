@@ -1,38 +1,29 @@
-# Installation
+# Instalación y Configuración
 
-## Stable release
+## 1. Crear y activar el entorno virtual (`venv`)
 
-To install TPFI IS2 AWS, run this command in your terminal:
+Desde la raíz del proyecto, crear y activar el ambiente virtual de Python:
 
-```sh
-uv add TPFI-IS2-AWS
+```bash
+python3 -m venv TPF
+source TPF/bin/activate
 ```
 
-Or if you prefer to use `pip`:
+## 2. Instalar dependencias y el paquete
 
-```sh
-pip install TPFI-IS2-AWS
+Instalar todas las librerías listadas en `REQUIREMENTS.txt` y registrar el paquete en modo editable:
+
+```bash
+pip install -r REQUIREMENTS.txt
+pip install -e .
 ```
 
-## From source
+## 3. Configurar credenciales de AWS
 
-The source files for TPFI IS2 AWS can be downloaded from the [Github repo](https://github.com/MaitenBlanc/TPFI-IS2-AWS).
+Asegúrese de configurar las credenciales de acceso a AWS DynamoDB con permiso sobre las tablas `CorporateData` y `CorporateLog`:
 
-You can either clone the public repository:
-
-```sh
-git clone https://github.com/MaitenBlanc/TPFI-IS2-AWS
+```bash
+aws configure
 ```
 
-Or download the [tarball](https://github.com/MaitenBlanc/TPFI-IS2-AWS/tarball/main):
-
-```sh
-curl -OJL https://github.com/MaitenBlanc/TPFI-IS2-AWS/tarball/main
-```
-
-Once you have a copy of the source, you can install it with:
-
-```sh
-cd TPFI-IS2-AWS
-uv sync
-```
+Ingrese su `AWS Access Key ID`, `AWS Secret Access Key` y la región correspondiente (por ejemplo `us-west-2` o `us-east-1`).

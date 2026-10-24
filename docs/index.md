@@ -1,9 +1,11 @@
-# TPFI IS2 AWS
+# TPFI IS2 AWS - Documentación Oficial
 
-Trabajo Práctico Final Integrador IS2 con Patrones y DynamoDB.
+Trabajo Práctico Final Integrador (TPFI) de **Ingeniería de Software II (UADER - FCyT)**.
 
-## Getting started
+Este proyecto implementa una arquitectura cliente-servidor TCP en Python para la adquisición y actualización centralizada de datos corporativos en **AWS DynamoDB** (`CorporateData` y `CorporateLog`), aplicando los patrones de diseño **Singleton**, **Proxy** y **Observer**.
 
-- [Installation](installation.md) - how to install TPFI IS2 AWS
-- [Usage](usage.md) - how to use TPFI IS2 AWS
-- [API Reference](api.md) - auto-generated API documentation
+## Secciones
+
+- [Instalación y Configuración](installation.md): Pre-requisitos, entorno virtual `venv`, dependencias y credenciales de AWS.
+- [Guía de Uso](usage.md): Ejecución del servidor, cliente transaccional, cliente observador y pruebas.
+- [Referencia de API](api.md): Documentación detallada de los módulos, clases y métodos del paquete `tpfi_is2_aws`.

@@ -11,10 +11,10 @@ Implementación de una arquitectura cliente-servidor TCP en Python que gestiona 
 
 ## Características Principales
 
-* **Patrón Singleton (`DatabaseSingleton`):** Acceso único y *thread-safe* a las tablas `CorporateData` y `CorporateLog` en AWS DynamoDB mediante `boto3`.
-* **Patrón Proxy (`CorporateDataProxy`):** Intermediario que intercepta todas las peticiones (`get`, `list`, `set`, `subscribe`), registra obligatoriamente una pista de auditoría en `CorporateLog` (`UUID`, `sesion`, `accion`, `timestamp`) y delega la operación al Singleton.
+* **Patrones Singleton (`CorporateDataSingleton` y `CorporateLogSingleton`):** Sendos Singletons *thread-safe* para el acceso físico independiente a las tablas `CorporateData` y `CorporateLog` en AWS DynamoDB mediante `boto3`, incluyendo recolección de metadatos de CPU con `platform` y `uuid.getnode()`.
+* **Patrón Proxy (`CorporateDataProxy`):** Intermediario que intercepta todas las peticiones (`get`, `list`, `set`, `subscribe`), registra obligatoriamente una pista de auditoría en `CorporateLog` (`UUID`, `sesion` vía `uuid.uuid4()`, `accion`, `timestamp` y datos de CPU) y delega la operación al Singleton correspondiente.
 * **Patrón Observer (`ObserverManager`):** Gestión de clientes suscriptos mediante sockets TCP abiertos y notificación automática en tiempo real ante cada actualización (`set`) en la base de datos.
-* **Calidad y CI/CD:** Validación continua con `black`, `ruff`, `mypy`, `bandit`, `pytest` (cobertura > 85%) y generación de documentación con `pdoc` mediante GitHub Actions.
+* **Calidad y CI/CD:** Validación continua con `black`, `ruff` (PEP8 y PEP257), `mypy`, `pyright`, `bandit`, `pytest` (cobertura > 85%) y generación de documentación automática con `pdoc` mediante GitHub Actions.
 
 ---
 
@@ -28,13 +28,13 @@ flowchart TD
     A([Inicio: Cliente conecta por TCP]) --> B[Recibir JSON con petición]
     B --> C{¿Qué acción solicita?}
     
-    C -->|get| D[Auditoría: Registrar 'get' en CorporateLog]
-    C -->|list| E[Auditoría: Registrar 'list' en CorporateLog]
-    C -->|set| F[Auditoría: Registrar 'set' en CorporateLog]
+    C -->|get| D[Auditoría: Registrar 'get' en CorporateLog vía CorporateLogSingleton]
+    C -->|list| E[Auditoría: Registrar 'list' en CorporateLog vía CorporateLogSingleton]
+    C -->|set| F[Auditoría: Registrar 'set' en CorporateLog vía CorporateLogSingleton]
     
-    D --> G[Proxy: Recuperar tuple de CorporateData vía Singleton]
-    E --> H[Proxy: Recuperar toda la tabla vía Singleton]
-    F --> I[Proxy: Actualizar o crear tuple en CorporateData vía Singleton]
+    D --> G[Proxy: Recuperar tuple de CorporateData vía CorporateDataSingleton]
+    E --> H[Proxy: Recuperar toda la tabla vía CorporateDataSingleton]
+    F --> I[Proxy: Actualizar o crear tuple en CorporateData vía CorporateDataSingleton]
     
     G --> J[Formatear respuesta JSON]
     H --> J
@@ -92,7 +92,7 @@ stateDiagram-v2
 
 ---
 
-## Guía de Uso y Pruebas Manuales (Fases 3 y 4)
+## Guía de Uso y Pruebas Manuales
 
 Abrir **tres terminales** con el entorno virtual activado desde la raíz del proyecto:
 
@@ -122,7 +122,7 @@ python src/tpfi_is2_aws/observerclient.py -s localhost -p 8080 -o data/salida_ob
 
 ---
 
-## Testing, Calidad y Cobertura (Fase 5)
+## Testing, Calidad y Cobertura
 
 ### 1. Tests Unitarios (con Mocks) y Cobertura (> 85%)
 ```bash
@@ -130,16 +130,19 @@ pytest --cov=src/tpfi_is2_aws tests/test_tpfi_is2_aws.py --cov-fail-under=85
 ```
 
 ### 2. Tests de Aceptación (Integración Real con AWS DynamoDB)
-Evalúa servidor caído, argumentos malformados, doble apertura de puerto, datos mínimos e impacto real en `CorporateData` y `CorporateLog`:
+Evalúa servidor caído, argumentos malformados en cada programa, doble apertura de puerto, datos mínimos y el camino feliz de todas las acciones (`set`, `get`, `list`, `subscribe`) con impacto real en `CorporateData` y `CorporateLog`:
 ```bash
 python3 test_aceptacion.py
 ```
 
-### 3. Validaciones de Formato, Tipado, Seguridad y Documentación
+### 3. Validaciones de Formato (PEP8 / PEP257), Tipado, Seguridad y Documentación
 ```bash
 black --check src/ tests/
 ruff check src/ tests/
 mypy src/
+pyright src/
 bandit -r src/ -ll
 pdoc src/tpfi_is2_aws -o docs_output
+```
+
 ```
