@@ -52,8 +52,8 @@ class CorporateDataSingleton:
         """Inicializa la conexión a la tabla CorporateData en DynamoDB solo una vez."""
         if not hasattr(self, "_inicializado"):
             logging.info("Inicializando Singleton para tabla CorporateData...")
-            self.dynamodb = boto3.resource("dynamodb")
-            self.table_data = self.dynamodb.Table("CorporateData")
+            self.dynamodb: Any = boto3.resource("dynamodb")
+            self.table_data: Any = self.dynamodb.Table("CorporateData")
             self._inicializado = True
 
     def get_record(self, record_id: str) -> dict[str, Any]:
@@ -130,8 +130,8 @@ class CorporateLogSingleton:
         """Inicializa la conexión a la tabla CorporateLog en DynamoDB solo una vez."""
         if not hasattr(self, "_inicializado"):
             logging.info("Inicializando Singleton para tabla CorporateLog...")
-            self.dynamodb = boto3.resource("dynamodb")
-            self.table_log = self.dynamodb.Table("CorporateLog")
+            self.dynamodb: Any = boto3.resource("dynamodb")
+            self.table_log: Any = self.dynamodb.Table("CorporateLog")
             self._inicializado = True
 
     @staticmethod
