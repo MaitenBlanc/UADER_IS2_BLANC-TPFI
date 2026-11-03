@@ -9,4 +9,3 @@ VERSION = "1.0.0"
 BUILD = "001"
 
 __all__ = ["BUILD", "VERSION"]
-
