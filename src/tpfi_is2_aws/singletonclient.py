@@ -58,7 +58,16 @@ class SingletonClient:
             logging.info("Enviando petición...")
             cliente.send(json.dumps(peticion).encode("utf-8"))
 
-            respuesta_raw = cliente.recv(4096).decode("utf-8")
+            fragmentos: list[bytes] = []
+            while True:
+                bloque = cliente.recv(65536)
+                if not bloque:
+                    break
+                fragmentos.append(bloque)
+                if bloque.endswith(b"\n"):
+                    break
+
+            respuesta_raw = b"".join(fragmentos).decode("utf-8")
             respuesta: dict[str, Any] = json.loads(respuesta_raw)
             return respuesta
         finally:

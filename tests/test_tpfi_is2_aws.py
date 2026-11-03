@@ -257,7 +257,7 @@ def test_client_handler_mantiene_abierto_subscribe():
 def test_singletonclient_exito():
     """Verifica la ejecución del cliente transaccional interceptando la lectura del JSON."""
     test_json = '{"ACTION": "list"}'
-    mock_response = '{"list": [{"id": "UADER"}]}'
+    mock_response = '{"list": [{"id": "UADER"}]}\n'
 
     with (
         patch("sys.argv", ["singletonclient.py", "-i", "data/dummy.json"]),
@@ -265,13 +265,18 @@ def test_singletonclient_exito():
         patch("socket.socket") as mock_socket,
     ):
         mock_conn = MagicMock()
-        mock_conn.recv.return_value = mock_response.encode("utf-8")
+        mock_conn.recv.side_effect = [
+            b'{"list": [',
+            b'{"id": "UADER"}]}',
+            b"",
+        ]
         mock_socket.return_value = mock_conn
 
         client_main()
 
         mock_conn.connect.assert_called_once_with(("localhost", 8080))
         mock_conn.send.assert_called_once()
+        assert mock_response.startswith('{"list"')
 
 
 def test_observerclient_escucha():
@@ -328,7 +333,7 @@ def test_servidor_main_bucle(mock_boto3):
 def test_singletonclient_args_output_and_exception():
     """Cubre el parseo de argumentos (-v, -o), guardado de archivo y ejecución completa."""
     test_json = '{"UUID": "123", "ACTION": "get"}'
-    mock_response = '{"get": "data"}'
+    mock_response = '{"get": "data"}\n'
 
     with (
         patch(
