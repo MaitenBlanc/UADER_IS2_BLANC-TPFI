@@ -10,4 +10,3 @@ BUILD = "001"
 
 __all__ = ["BUILD", "VERSION"]
 
-__all__ = ["BUILD", "VERSION"]
