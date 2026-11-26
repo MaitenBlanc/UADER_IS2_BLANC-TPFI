@@ -1,4 +1,4 @@
-boto3==1.43.108
+boto3==1.44.6
 ruff
 black
 mypy
